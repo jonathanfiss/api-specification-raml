@@ -1,0 +1,20 @@
+#%RAML 1.0 SecurityScheme
+type: x-another-auth
+describedBy:
+  headers:
+    SpecialToken:
+      description: Used to send a custom token.
+      type: string
+  responses:
+    401:
+      description: 
+      body:
+        application/json:
+          type: !include ../datatypes/responses/errors/error-type.raml
+          example: !include ../examples/responses/error/unauthorized.json
+    403:
+      description: 
+      body:
+        application/json:
+          type: !include ../datatypes/responses/errors/error-type.raml
+          example: !include ../examples/responses/error/forbidden.json

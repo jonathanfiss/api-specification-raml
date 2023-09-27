@@ -1,0 +1,11 @@
+#%RAML 1.0 SecurityScheme
+type: Basic Authentication
+description: This API supports Basic Authentication.
+describedBy:
+  responses:
+    401:
+      description: 
+      body:
+        application/json:
+          type: !include ../datatypes/responses/errors/error-type.raml
+          example: !include ../examples/responses/error/unauthorized.json

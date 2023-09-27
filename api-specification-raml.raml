@@ -1,0 +1,231 @@
+#%RAML 1.0
+title: api-specification-raml
+
+protocols:
+  - HTTPS
+
+baseUri: /{host}/port/{apiName}/
+baseUriParameters:
+  host:
+    default: localhost:8091
+    type: string
+    enum:
+      - localhost:8091
+      - dev-api-mysite.com
+      - hml-api-mysite.com
+      - api-mysite.com
+  apiName:
+    default: dev-api-specification-raml
+    type: string | any
+    enum:
+      - dev-api-specification-raml
+      - hml-api-specification-raml
+      - api-specification-raml
+
+uses:
+  commonFragments: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/common-raml-fragment/1.0.3/common-raml-fragment.raml
+  security: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/securities-raml-fragment/1.0.0/securities-raml-fragment.raml
+
+  resourceTypes: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/common-raml-fragment/1.0.3/resourcetypes/generic-resourcetypes.raml
+  experienceResourceTypes: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/common-raml-fragment/1.0.3/resourcetypes/experience-resourcetypes.raml
+  processResourceTypes: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/common-raml-fragment/1.0.3/resourcetypes/process-resourcetypes.raml
+  systemResourceTypes: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/common-raml-fragment/1.0.3/resourcetypes/system-resourcetypes.raml
+
+securedBy:
+  - security.basicAuthentication
+
+/v1:
+  /customers:
+    type: processResourceTypes.collection
+    get:
+      is:
+        - commonFragments.hasPageable
+        - commonFragments.hasResponseJson200: {
+          typeName: !include datatypes/v1/responses/customers/get-customers.raml,
+          exampleResponse: !include examples/v1/responses/customers/get-customers.json }
+    post:
+      is:
+        - commonFragments.hasRequestJson: {
+          typeName: !include datatypes/v1/requests/customers/post-customers.raml, 
+          exampleRequest: !include examples/v1/requests/customers/post-customers.json}
+        - commonFragments.hasResponseJson201: {
+          typeName: !include datatypes/v1/responses/customers/post-customers.raml,
+          exampleResponse: !include examples/v1/responses/customers/post-customers.json}
+    /{id}:
+      type: resourceTypes.collection
+      get:
+        is:
+          - commonFragments.hasResponseJson200: {
+            typeName: !include datatypes/v1/responses/customers/id/get-customers-id.raml, 
+            exampleResponse: !include examples/v1/responses/customers/id/get-customers-id.json }
+      put:
+        is:
+          - commonFragments.hasRequestJson: {
+            typeName: !include datatypes/v1/requests/customers/id/put-customers-id.raml, 
+            exampleRequest: !include examples/v1/requests/customers/id/put-customers-id.json}
+          - commonFragments.hasResponseJson200: {
+            typeName: !include datatypes/v1/responses/customers/id/put-customers-id.raml, 
+            exampleResponse: !include examples/v1/responses/customers/id/put-customers-id.json }
+      delete:
+        is:
+          - commonFragments.hasResponse204
+    /image:
+      type: resourceTypes.collection
+      post:
+        is:
+          - commonFragments.hasRequestFormData: {
+            typeName: !include datatypes/v1/requests/customers/image/post-image.raml, 
+            exampleRequest: nil}
+          - commonFragments.hasResponseJson202: {
+            typeName: !include datatypes/v1/responses/customers/image/post-image.raml,
+            exampleResponse: !include examples/v1/responses/customers/image/post-image.json}
+
+
+documentation:
+  -
+    title: Welcome
+    content: |
+      Welcome to the Accounts API Documentation. The Accounts API allows you
+      to do stuff. See also [example.com](https://www.example.com).
+
+      Accounts API has the following functionality:
+
+        + Retrieve accounts for the logged user
+        + Get detailed information of a specific account
+        + Update an account
+
+      Only authenticated users are  able to perform the account operations.
+  -
+    title: Version history
+    content: |
+      More content here. Including **bold** text!
+      The table below contains the version history for this API:
+
+      | Version  | Release date  | Link to documentation |
+      | -------- | ------------- | --------------------- |
+      | v2       | January 2020  | [Current Page](https://www.example.com). |
+      | v1       | January 2019  | [Archive](https://www.example.com). |
+
+      ## Changes in version 2
+      1. Version 2 introduces the following updates:
+          - Better functionality
+          - Faster responses
+
+      ## Changes in version 1
+      1. Version 1 introduces the following updates:
+          - Ability to create and update accounts
+
+  - title: Errors
+    content: |
+        Accounts API uses conventional HTTP response codes to indicate the success
+        or failure of an API request.
+
+        ## Return Codes
+
+        Code    | Description
+        ------  | ---
+        **2XX** | The API call was successful.
+        **4XX** | The API call had an error. The error will be encoded in the body of the response.
+        **5XX** | The API call was unsuccessful. You should retry later.
+
+        ##### Specific return codes
+
+        Code     | Description
+        -------- | ---
+        `200 OK` | The request was successful.
+        `201 Created`      | The request was successful and a resource is created.
+        `400 Bad Request`  | The request could not be understood or required parameters were missing.
+        `401 Unauthorized` | Authentication failed or user doesn't have permissions for requested operation.
+        `403 Forbidden`    | Access denied, the operation is not allowed.
+        `404 Not Found`    | Resource was not found.
+        `405 Method Not Allowed`    | Requested method is not supported for resource.
+        `409 Conflict`     | Request could not be completed due to conflicting information.
+        `412 Precondition failed `  | Request could not be completed due to one of the preconditions is not accomplished.
+        `500 Internal server error` | Internal server error. Try again later.
+        `503 Service Unavailable`   | Service is temporarily unavailable. Try again later.
+
+        ## Schema returned when errors
+        When there is a 4XX error, the errors array will be informed to help debug errors.
+
+        Error response schema :
+        ```
+          {
+            "error_response": {
+              "properties": {
+                "errors": [
+                  {
+                    "type": {
+                      "description": "Error Type",
+                      "required": true,
+                      "type": "string",
+                      "enum": [
+                        "json",
+                        "form",
+                        "header",
+                        "query"
+                      ]
+                    },
+                    "datapath": {
+                      "description": "Natural path to the error message",
+                      "required": false,
+                      "type": "string",
+                      "example": "email"
+                    },
+                    "keyword": {
+                      "description": "Keyword that failed validation",
+                      "required": false,
+                      "type": "string",
+                      "example": "format"
+                    },
+                    "schema": {
+                      "description": "The schema value that failed validation",
+                      "required": false,
+                      "type": "any",
+                      "example": true
+                    },
+                    "data": {
+                      "description": "The data that failed validation",
+                      "required": false,
+                      "type": "any",
+                      "example": "Pasw@rd"
+                    },
+                    "message": {
+                      "description": "Message Description",
+                      "required": true,
+                      "type": "string",
+                      "example": "Missing required property: email"
+                    }
+                  }
+                  ],
+                "stack": {
+                  "description": "Stack trace of the error",
+                  "required": false,
+                  "type": "string",
+                  "example": "BadRequestError: Request failed to validate against RAML definition\\n    at createValidationError"
+                }
+              }
+            }
+          }
+        ```
+  -
+    title: Headers
+    content: |
+      All headers for Accounts APIs will follow the:
+      + Header details
+
+  -
+    title: Security
+    content: |
+      Content about security here.
+
+  -
+    title: Rate Limiting
+    content: |
+        To make the API fast for everybody, we have a rate limit of 500 requests
+        per minute per user account and IP address. If you get a <strong>status
+        code 429</strong> on your response, it means that you have exceeded this
+        rate limit.
+
+  - title: More chapters
+    content: |
+      More content here.
