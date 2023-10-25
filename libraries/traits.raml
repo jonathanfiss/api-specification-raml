@@ -1,0 +1,12 @@
+#%RAML 1.0 Library
+usage: All common traits
+traits:
+  get-customers:
+    headers:
+      cache:
+        type: boolean
+        required: false
+    queryParameters:
+      name:
+        type: string
+        required: false

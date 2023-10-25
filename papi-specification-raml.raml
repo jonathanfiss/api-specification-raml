@@ -1,0 +1,96 @@
+#%RAML 1.0
+title: papi-specification-raml
+
+protocols:
+  - HTTPS
+
+baseUri: https://{host}/{apiName}/
+baseUriParameters:
+  host:
+    default: localhost:8091
+    type: string
+    enum:
+      - localhost:8091
+      - dev-api-mysite.com
+      - hml-api-mysite.com
+      - api-mysite.com
+  apiName:
+    default: dev-papi-specification-raml
+    type: string
+    enum:
+      - dev-papi-specification-raml
+      - hml-papi-specification-raml
+      - papi-specification-raml
+
+uses:
+  # Security Fragments
+  security: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/securities-raml-fragment/1.0.0/securities-raml-fragment.raml
+
+  # Domain Fragments
+  domainFragments: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/domain-raml-fragment/1.0.0/domain-raml-fragment.raml
+
+  # Common Fragments
+  commonFragments: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/common-raml-fragment/1.0.5/common-raml-fragment.raml
+  resourceTypes: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/common-raml-fragment/1.0.5/resourcetypes/generic-resourcetypes.raml
+  processResourceTypes: exchange_modules/ebd9d6f2-2413-467f-85d4-803be06dd391/common-raml-fragment/1.0.5/resourcetypes/process-resourcetypes.raml
+
+  traits: libraries/traits.raml
+
+/v1:
+  /customers:
+    type: processResourceTypes.collection
+    get:
+      is:
+        - traits.get-customers
+        - commonFragments.hasPageable
+        - commonFragments.hasResponseJson200: {typeName: domainFragments.response-get-customers}
+    post:
+      is:
+        - commonFragments.hasRequestJson: {typeName: domainFragments.request-post-customers}
+        - commonFragments.hasResponseJson201: {typeName: domainFragments.response-post-customers}
+    /{id}:
+      type: processResourceTypes.collection
+      get:
+        is:
+          - commonFragments.hasResponseJson200: {typeName: domainFragments.response-get-customers-id }
+      put:
+        is:
+          - commonFragments.hasRequestJson: {typeName: domainFragments.request-put-customers-id}
+          - commonFragments.hasResponseJson200: {typeName: domainFragments.response-put-customers-id}
+      delete:
+        is:
+          - commonFragments.hasResponse204
+    /image:
+      type: processResourceTypes.collection
+      post:
+        is:
+          - commonFragments.hasRequestFormData: {typeName: domainFragments.request-post-customers-image}
+          - commonFragments.hasResponseJson202: {typeName: domainFragments.response-post-customers-image}
+
+
+documentation:
+  -
+    title: Welcome
+    content: !include docs/welcome.markdown
+
+  -
+    title: Version history
+    content: !include docs/version-history.markdown
+      
+
+  - title: Errors
+    content: !include docs/errors.markdown
+  -
+    title: Headers
+    content: !include docs/headers.markdown
+
+  -
+    title: Security
+    content: !include docs/security.markdown
+
+  -
+    title: Rate Limiting
+    content: !include docs/rate-limiting.markdown
+
+  - title: More chapters
+    content: !include docs/more-chapters.markdown

@@ -1,18 +1,23 @@
 {
-    "main": "api-specification-raml.raml",
+    "main": "papi-specification-raml.raml",
     "name": "api-specification-raml",
     "classifier": "raml",
     "tags": [],
     "dependencies": [
         {
-            "groupId": "",
+            "version": "1.0.0",
             "assetId": "securities-raml-fragment",
-            "version": "1.0.0"
-        },
-        {
-            "groupId": "",
+            "groupId": ""
+          },
+          {
+            "version": "1.0.5",
             "assetId": "common-raml-fragment",
-            "version": "1.0.3"
-        }
+            "groupId": ""
+          },
+          {
+            "version": "1.0.0",
+            "assetId": "domain-raml-fragment",
+            "groupId": ""
+          }
     ]
 }

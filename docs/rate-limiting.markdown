@@ -1,0 +1,1 @@
+To make the API fast for everybody, we have a rate limit of 500 requests per minute per user account and IP address. If you get a <strong>status code 429</strong> on your response, it means that you have exceeded this rate limit.
