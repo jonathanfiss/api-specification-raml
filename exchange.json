@@ -7,17 +7,17 @@
         {
             "version": "1.0.0",
             "assetId": "securities-raml-fragment",
-            "groupId": ""
+            "groupId": "aaa1a1a1-2222-333c-44d4-555ee55ee555"
           },
           {
             "version": "1.0.5",
             "assetId": "common-raml-fragment",
-            "groupId": ""
+            "groupId": "aaa1a1a1-2222-333c-44d4-555ee55ee555"
           },
           {
             "version": "1.0.0",
             "assetId": "domain-raml-fragment",
-            "groupId": ""
+            "groupId": "aaa1a1a1-2222-333c-44d4-555ee55ee555"
           }
     ]
 }
